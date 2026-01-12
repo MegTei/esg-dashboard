@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ball & Doggett ESG Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f3f4f6; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+        .header { background: linear-gradient(to right, #2563eb, #10b981); color: white; padding: 48px; border-radius: 12px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 36px; margin-bottom: 8px; }
+        .header p { font-size: 18px; opacity: 0.9; }
+        .date-box { background: rgba(255,255,255,0.1); padding: 16px 24px; border-radius: 8px; text-align: right; }
+        .date-box p:first-child { font-size: 12px; opacity: 0.75; text-transform: uppercase; }
+        .date-box p:last-child { font-size: 24px; font-weight: bold; margin-top: 4px; }
+        .tabs { background: white; border-radius: 12px; margin-bottom: 24px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .tab-buttons { display: flex; border-bottom: 1px solid #e5e7eb; }
+        .tab-button { flex: 1; padding: 16px; background: none; border: none; cursor: pointer; font-size: 14px; font-weight: 600; color: #6b7280; transition: all 0.2s; }
+        .tab-button.active { background: #2563eb; color: white; }
+        .tab-button:hover:not(.active) { background: #f9fafb; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .kpi-card { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .kpi-card.green { border-left: 4px solid #10b981; }
+        .kpi-card.blue { border-left: 4px solid #2563eb; }
+        .kpi-card.orange { border-left: 4px solid #f59e0b; }
+        .kpi-card.red { border-left: 4px solid #ef4444; }
+        .kpi-title { font-size: 14px; color: #6b7280; margin-bottom: 8px; }
+        .kpi-value { font-size: 36px; font-weight: bold; color: #111827; }
+        .kpi-subtitle { font-size: 12px; color: #9ca3af; margin-top: 4px; }
+        .section { background: white; padding: 32px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .section-title { font-size: 24px; font-weight: bold; color: #111827; margin-bottom: 24px; }
+        .pillar-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+        .pillar-card { padding: 24px; border-radius: 8px; background: #f9fafb; }
+        .pillar-title { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
+        .pillar-item { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; }
+        .status-green { color: #10b981; font-weight: 600; }
+        .status-orange { color: #f59e0b; font-weight: 600; }
+        .status-blue { color: #2563eb; font-weight: 600; }
+        .highlights { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px; }
+        .highlight-section h4 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+        .highlight-section.green h4 { color: #10b981; }
+        .highlight-section.orange h4 { color: #f59e0b; }
+        .highlight-section ul { list-style: none; }
+        .highlight-section li { padding: 8px 0; font-size: 14px; color: #4b5563; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f9fafb; padding: 12px; text-align: left; font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; }
+        td { padding: 12px; border-top: 1px solid #e5e7eb; font-size: 14px; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+        .badge-green { background: #d1fae5; color: #065f46; }
+        .badge-orange { background: #fed7aa; color: #92400e; }
+        .badge-red { background: #fee2e2; color: #991b1b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>Ball & Doggett ESG Dashboard</h1>
+                <p>SUSTAIN: 2030 and Beyond - Change, Challenge, Create, Sustain</p>
+                <p style="font-size: 14px; margin-top: 8px; opacity: 0.75;">Tracking progress across 9 strategic ESG targets</p>
+            </div>
+            <div class="date-box">
+                <p>Report Date</p>
+                <p>January 2026</p>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab-buttons">
+                <button class="tab-button active" onclick="showTab('summary')">Summary</button>
+                <button class="tab-button" onclick="showTab('operational')">Operational Reporting</button>
+                <button class="tab-button" onclick="showTab('executive')">Executive Reporting</button>
+                <button class="tab-button" onclick="showTab('supplier')">Supplier Performance</button>
+            </div>
+        </div>
+
+        <!-- SUMMARY TAB -->
+        <div id="summary" class="tab-content active">
+            <div class="kpi-grid">
+                <div class="kpi-card green">
+                    <div class="kpi-title">Certified Products</div>
+                    <div class="kpi-value">86%</div>
+                    <div class="kpi-subtitle">Target: 90% by 2025</div>
+                </div>
+                <div class="kpi-card green">
+                    <div class="kpi-title">Emissions Reduction</div>
+                    <div class="kpi-value">22%</div>
+                    <div class="kpi-subtitle">Target: 30% by 2030</div>
+                </div>
+                <div class="kpi-card green">
+                    <div class="kpi-title">Safety LTIFR (AU)</div>
+                    <div class="kpi-value">0.0</div>
+                    <div class="kpi-subtitle">Zero harm workplace</div>
+                </div>
+                <div class="kpi-card orange">
+                    <div class="kpi-title">Supplier Compliance</div>
+                    <div class="kpi-value">57%</div>
+                    <div class="kpi-subtitle">Low risk suppliers</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="pillar-grid">
+                    <div class="pillar-card">
+                        <div class="pillar-title">People & Communities</div>
+                        <div class="pillar-item">
+                            <span>Safety (LTIFR)</span>
+                            <span class="status-green">✓ On Target</span>
+                        </div>
+                        <div class="pillar-item">
+                            <span>Female Managers (AU)</span>
+                            <span class="status-orange">29% → 34%</span>
+                        </div>
+                        <div class="pillar-item">
+                            <span>Community Partnerships</span>
+                            <span class="status-blue">In Development</span>
+                        </div>
+                    </div>
+                    <div class="pillar-card">
+                        <div class="pillar-title">Planet & Nature</div>
+                        <div class="pillar-item">
+                            <span>Emissions Reduction</span>
+                            <span class="status-green">22% ✓</span>
+                        </div>
+                        <div class="pillar-item">
+                            <span>Waste Recycling</span>
+                            <span class="status-orange">35% → 45%</span>
+                        </div>
+                        <div class="pillar-item">
+                            <span>Deforestation-Free</span>
+                            <span class="status-green">86% ✓</span>
+                        </div>
+                    </div>
+                    <div class="pillar-card">
+                        <div class="pillar-title">Innovation & Collaboration</div>
+                        <div class="pillar-item">
+                            <span>Ethical Sourcing</span>
+                            <span class="status-orange">Framework Dev</span>
+                        </div>
+                        <div class="pillar-item">
+                            <span>Sustainable Products</span>
+                            <span class="status-blue">Ecoporium</span>
+                        </div>
+                        <div class="pillar-item">
+                            <span>Innovation Launches</span>
+                            <span class="status-green">6 in 2025</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">2025 Key Milestones</h3>
+                <div class="highlights">
+                    <div class="highlight-section green">
+                        <h4>✓ Completed / On Track</h4>
+                        <ul>
+                            <li>• Australia LTIFR at 0.0 - zero harm achieved</li>
+                            <li>• Emissions reduced 22% vs 2022 baseline</li>
+                            <li>• 86% FSC/PEFC/Recycled certification</li>
+                            <li>• First climate disclosures for March 2026</li>
+                        </ul>
+                    </div>
+                    <div class="highlight-section orange">
+                        <h4>⚠ In Progress / Attention Needed</h4>
+                        <ul>
+                            <li>• Female managers: AU 29% / NZ 25% (need 5% YoY growth)</li>
+                            <li>• Waste recycling at 35% - tender underway</li>
+                            <li>• Supplier risk framework in development</li>
+                            <li>• 3 suppliers with expiring certifications</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPERATIONAL TAB -->
+        <div id="operational" class="tab-content">
+            <div class="kpi-grid">
+                <div class="kpi-card green">
+                    <div class="kpi-title">Certified Products</div>
+                    <div class="kpi-value">86%</div>
+                    <div class="kpi-subtitle">FSC/PEFC/Recycled</div>
+                </div>
+                <div class="kpi-card blue">
+                    <div class="kpi-title">2025 Target</div>
+                    <div class="kpi-value">90%</div>
+                    <div class="kpi-subtitle">On track</div>
+                </div>
+                <div class="kpi-card blue">
+                    <div class="kpi-title">Total SKUs Tracked</div>
+                    <div class="kpi-value">2,070</div>
+                    <div class="kpi-subtitle">Across all categories</div>
+                </div>
+                <div class="kpi-card green">
+                    <div class="kpi-title">Deforestation-Free</div>
+                    <div class="kpi-value">86%</div>
+                    <div class="kpi-subtitle">Verified coverage</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">Certification Status</h3>
+                <div class="pillar-grid">
+                    <div class="pillar-card">
+                        <div class="pillar-title">By Type</div>
+                        <div class="pillar-item"><span>FSC</span><span class="status-green">60%</span></div>
+                        <div class="pillar-item"><span>PEFC</span><span class="status-blue">12%</span></div>
+                        <div class="pillar-item"><span>Recycled</span><span class="status-orange">14%</span></div>
+                        <div class="pillar-item"><span>Non-Certified</span><span style="color:#ef4444; font-weight:600;">14%</span></div>
+                    </div>
+                    <div class="pillar-card">
+                        <div class="pillar-title">By Category</div>
+                        <div class="pillar-item"><span>Copy Paper</span><span class="status-green">95% certified</span></div>
+                        <div class="pillar-item"><span>Notebooks</span><span class="status-green">92% certified</span></div>
+                        <div class="pillar-item"><span>Packaging</span><span class="status-orange">85% certified</span></div>
+                        <div class="pillar-item"><span>Specialty Paper</span><span class="status-orange">73% certified</span></div>
+                    </div>
+                    <div class="pillar-card">
+                        <div class="pillar-title">Progress to 2030</div>
+                        <div class="pillar-item"><span>2024</span><span>86%</span></div>
+                        <div class="pillar-item"><span>2025</span><span>90% (target)</span></div>
+                        <div class="pillar-item"><span>2027</span><span>95% (target)</span></div>
+                        <div class="pillar-item"><span>2030</span><span class="status-green">100% (goal)</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EXECUTIVE TAB -->
+        <div id="executive" class="tab-content">
+            <div class="section">
+                <h3 class="section-title" style="color: #2563eb;">Empowering People, Supporting Communities</h3>
+                <div class="kpi-grid">
+                    <div class="kpi-card green">
+                        <div class="kpi-title">Australia LTIFR 2024</div>
+                        <div class="kpi-value">0.0</div>
+                        <div class="kpi-subtitle">Target: &lt;10</div>
+                    </div>
+                    <div class="kpi-card green">
+                        <div class="kpi-title">NZ LTIFR 2024</div>
+                        <div class="kpi-value">9.98</div>
+                        <div class="kpi-subtitle">Target: &lt;10</div>
+                    </div>
+                    <div class="kpi-card orange">
+                        <div class="kpi-title">Female Managers (AU)</div>
+                        <div class="kpi-value">29%</div>
+                        <div class="kpi-subtitle">Target: 34%</div>
+                    </div>
+                    <div class="kpi-card blue">
+                        <div class="kpi-title">Community Partnerships</div>
+                        <div class="kpi-value">TBC</div>
+                        <div class="kpi-subtitle">Establish 2025</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title" style="color: #10b981;">Nurturing the Planet, Caring for Nature</h3>
+                <div class="kpi-grid">
+                    <div class="kpi-card blue">
+                        <div class="kpi-title">2022 Baseline</div>
+                        <div class="kpi-value">2,200t</div>
+                        <div class="kpi-subtitle">CO2e emissions</div>
+                    </div>
+                    <div class="kpi-card green">
+                        <div class="kpi-title">Current (2025)</div>
+                        <div class="kpi-value">1,716t</div>
+                        <div class="kpi-subtitle">22% reduction</div>
+                    </div>
+                    <div class="kpi-card green">
+                        <div class="kpi-title">2030 Target</div>
+                        <div class="kpi-value">1,540t</div>
+                        <div class="kpi-subtitle">30% reduction</div>
+                    </div>
+                    <div class="kpi-card orange">
+                        <div class="kpi-title">Waste Recycling</div>
+                        <div class="kpi-value">35%</div>
+                        <div class="kpi-subtitle">Target: 85% by 2030</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title" style="color: #7c3aed;">Advancing Innovation, Fostering Collaboration</h3>
+                <div class="kpi-grid">
+                    <div class="kpi-card orange">
+                        <div class="kpi-title">Ethical Sourcing</div>
+                        <div class="kpi-value">TBC</div>
+                        <div class="kpi-subtitle">Framework in development</div>
+                    </div>
+                    <div class="kpi-card green">
+                        <div class="kpi-title">Ecoporium</div>
+                        <div class="kpi-value">Active</div>
+                        <div class="kpi-subtitle">Sustainable products</div>
+                    </div>
+                    <div class="kpi-card blue">
+                        <div class="kpi-title">Innovation Launches</div>
+                        <div class="kpi-value">6</div>
+                        <div class="kpi-subtitle">2025 target</div>
+                    </div>
+                    <div class="kpi-card blue">
+                        <div class="kpi-title">Top 20 Suppliers</div>
+                        <div class="kpi-value">$400M</div>
+                        <div class="kpi-subtitle">Annual spend</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUPPLIER TAB -->
+        <div id="supplier" class="tab-content">
+            <div class="kpi-grid">
+                <div class="kpi-card blue">
+                    <div class="kpi-title">Total Suppliers</div>
+                    <div class="kpi-value">7</div>
+                    <div class="kpi-subtitle">Top tier monitored</div>
+                </div>
+                <div class="kpi-card green">
+                    <div class="kpi-title">Low Risk</div>
+                    <div class="kpi-value">4</div>
+                    <div class="kpi-subtitle">57% of suppliers</div>
+                </div>
+                <div class="kpi-card orange">
+                    <div class="kpi-title">Medium Risk</div>
+                    <div class="kpi-value">2</div>
+                    <div class="kpi-subtitle">29% of suppliers</div>
+                </div>
+                <div class="kpi-card red">
+                    <div class="kpi-title">High Risk</div>
+                    <div class="kpi-value">1</div>
+                    <div class="kpi-subtitle">14% - requires action</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">Supplier Performance</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Supplier</th>
+                            <th>Country</th>
+                            <th>SKUs</th>
+                            <th>% Certified</th>
+                            <th>FSC Expiry</th>
+                            <th>Risk</th>
+                            <th>Annual Spend</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Hansol Paper</strong></td>
+                            <td>Korea</td>
+                            <td>450</td>
+                            <td style="color: #10b981; font-weight: 600;">95%</td>
+                            <td>2025-12-31</td>
+                            <td><span class="badge badge-green">Low</span></td>
+                            <td>$64.5M</td>
+                        </tr>
+                        <tr>
+                            <td><strong>UPM</strong></td>
+                            <td>Finland</td>
+                            <td>380</td>
+                            <td style="color: #10b981; font-weight: 600;">98%</td>
+                            <td>2026-03-20</td>
+                            <td><span class="badge badge-green">Low</span></td>
+                            <td>$62.2M</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Japan Pulp & Paper</strong></td>
+                            <td>Japan</td>
+                            <td>290</td>
+                            <td style="color: #f59e0b; font-weight: 600;">92%</td>
+                            <td>2025-08-15</td>
+                            <td><span class="badge badge-orange">Medium</span></td>
+                            <td>$22.8M</td>
+                        </tr>
+                        <tr>
+                            <td><strong>APRIL</strong></td>
+                            <td>Singapore</td>
+                            <td>340</td>
+                            <td style="color: #f59e0b; font-weight: 600;">88%</td>
+                            <td>2025-06-30</td>
+                            <td><span class="badge badge-orange">Medium</span></td>
+                            <td>$20.7M</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Yenom</strong></td>
+                            <td>Singapore</td>
+                            <td>210</td>
+                            <td style="color: #10b981; font-weight: 600;">90%</td>
+                            <td>2026-01-10</td>
+                            <td><span class="badge badge-green">Low</span></td>
+                            <td>$18.8M</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mondi</strong></td>
+                            <td>Austria</td>
+                            <td>180</td>
+                            <td style="color: #10b981; font-weight: 600;">100%</td>
+                            <td>2026-07-22</td>
+                            <td><span class="badge badge-green">Low</span></td>
+                            <td>$12.6M</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hankuk Paper</strong></td>
+                            <td>Korea</td>
+                            <td>220</td>
+                            <td style="color: #ef4444; font-weight: 600;">85%</td>
+                            <td>2025-05-18</td>
+                            <td><span class="badge badge-red">High</span></td>
+                            <td>$15.4M</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">Action Items</h3>
+                <div style="background: #fff3cd; border-left: 4px solid #f59e0b; padding: 16px; border-radius: 4px; margin-bottom: 12px;">
+                    <strong>⚠ 3 suppliers with certifications expiring within 6 months</strong><br>
+                    <span style="font-size: 14px; color: #6b7280;">APRIL, Japan Pulp & Paper, Hankuk Paper - initiate renewal process</span>
+                </div>
+                <div style="background: #fee2e2; border-left: 4px solid #ef4444; padding: 16px; border-radius: 4px;">
+                    <strong>⚠ 1 high-risk supplier requiring immediate action</strong><br>
+                    <span style="font-size: 14px; color: #6b7280;">Hankuk Paper - 85% certification rate below target, schedule compliance review</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
